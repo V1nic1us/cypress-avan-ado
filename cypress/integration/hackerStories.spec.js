@@ -58,7 +58,7 @@ describe("Hacker Stories", () => {
         cy.intercept(
           "GET", 
           `**/search?query=${initialTerm}&page=0`, {
-          fixture: "stories",
+          fixture: "stories"
         }).as("getStories");
 
         cy.visit("/");
@@ -72,13 +72,13 @@ describe("Hacker Stories", () => {
       });
 
       context("List of stories", () => {
+        const stories = require('../fixtures/stories.json')
         it.only("shows the right data for all rendered stories", () => {
-          const stories = require('../fixtures/stories.json')
           cy.get('.item')
             .first()
             .should('contain', stories.hits[0].title)
             .and('contain', stories.hits[0].author)
-            // .and('contain', stories.hits[0].num_coments)
+            .and('contain', stories.hits[0].num_comments)
             .and('contain', stories.hits[0].points)
           cy.get(`.item a:contains(${stories.hits[0].title})`)
             .should('have.attr', 'href', stories.hits[0].url)
@@ -87,7 +87,7 @@ describe("Hacker Stories", () => {
             .last()
             .should('contain', stories.hits[1].title)
             .and('contain', stories.hits[1].author)
-            // .and('contain', stories.hits[1].num_coments)
+            .and('contain', stories.hits[1].num_comments)
             .and('contain', stories.hits[1].points)
             cy.get(`.item a:contains(${stories.hits[1].title})`)
             .should('have.attr', 'href', stories.hits[1].url)
