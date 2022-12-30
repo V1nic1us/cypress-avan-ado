@@ -78,7 +78,11 @@ describe("Hacker Stories", () => {
             .and("contain", stories.hits[0].author)
             .and("contain", stories.hits[0].num_comments)
             .and("contain", stories.hits[0].points);
-          cy.get(`.item a:contains(${stories.hits[0].title})`).should("have.attr","href",stories.hits[0].url);
+          cy.get(`.item a:contains(${stories.hits[0].title})`).should(
+            "have.attr",
+            "href",
+            stories.hits[0].url
+          );
 
           cy.get(".item")
             .last()
@@ -104,33 +108,80 @@ describe("Hacker Stories", () => {
         // and so, how can I test ordering?
         // This is why these tests are being skipped.
         // TODO: Find a way to test them out.
-        context("Order by", () => {
-          it.only("orders by title", () => {
-            cy.get('.list-header-button:contains(Title)')
-              .as('titleHeader')
-              .click()
-            cy.get('.item')
+        context.only("Order by", () => {
+          it("orders by title", () => {
+            cy.get(".list-header-button:contains(Title)")
+              .as("titleHeader")
+              .click();
+            cy.get(".item")
               .first()
-              .should('be.visible')
-              .and('contain', stories.hits[0].title)
-            cy.get(`.item a:contains(${stories.hits[0].title})`)
-              .should("have.attr","href",stories.hits[0].url);
+              .should("be.visible")
+              .and("contain", stories.hits[0].title);
+            cy.get(`.item a:contains(${stories.hits[0].title})`).should(
+              "have.attr",
+              "href",
+              stories.hits[0].url
+            );
 
-            cy.get('@titleHeader')
-              .click()
-            cy.get('.item')
+            cy.get("@titleHeader").click();
+            cy.get(".item")
               .first()
-              .should('be.visible')
-              .and('contain', stories.hits[1].title)
-            cy.get(`.item a:contains(${stories.hits[1].title})`)
-              .should("have.attr","href",stories.hits[1].url);
+              .should("be.visible")
+              .and("contain", stories.hits[1].title);
+            cy.get(`.item a:contains(${stories.hits[1].title})`).should(
+              "have.attr",
+              "href",
+              stories.hits[1].url
+            );
           });
 
-          it("orders by author", () => {});
+          it("orders by author", () => {
+            cy.get(".list-header-button:contains(Author)")
+            .as("authorHeader");
+            // .click();
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[0].author);
 
-          it("orders by comments", () => {});
+            cy.get("@authorHeader").click();
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[1].author);
+          });
 
-          it("orders by points", () => {});
+          it("orders by comments", () => {
+            cy.get(".list-header-button:contains(Comments)").as("authorHeader");
+            // .click();
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[0].num_comments);
+
+            cy.get("@authorHeader").click();
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[1].num_comments);
+          });
+
+          it("orders by points", () => {
+            cy.get(".list-header-button:contains(Points)").as("pointsHeader");
+            // .click()
+
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[0].points);
+
+            cy.get("@pointsHeader").click();
+
+            cy.get(".item")
+              .first()
+              .should("be.visible")
+              .and("contain", stories.hits[1].points);
+          });
         });
       });
     });
