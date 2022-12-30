@@ -55,10 +55,8 @@ describe("Hacker Stories", () => {
   context("Mocking the APi", () => {
     context("Footer and list of stories", () => {
       beforeEach(() => {
-        cy.intercept(
-          "GET", 
-          `**/search?query=${initialTerm}&page=0`, {
-          fixture: "stories"
+        cy.intercept("GET", `**/search?query=${initialTerm}&page=0`, {
+          fixture: "stories",
         }).as("getStories");
 
         cy.visit("/");
@@ -72,25 +70,27 @@ describe("Hacker Stories", () => {
       });
 
       context("List of stories", () => {
-        const stories = require('../fixtures/stories.json')
-        it.only("shows the right data for all rendered stories", () => {
-          cy.get('.item')
+        const stories = require("../fixtures/stories.json");
+        it("shows the right data for all rendered stories", () => {
+          cy.get(".item")
             .first()
-            .should('contain', stories.hits[0].title)
-            .and('contain', stories.hits[0].author)
-            .and('contain', stories.hits[0].num_comments)
-            .and('contain', stories.hits[0].points)
-          cy.get(`.item a:contains(${stories.hits[0].title})`)
-            .should('have.attr', 'href', stories.hits[0].url)
-            
-          cy.get('.item')
+            .should("contain", stories.hits[0].title)
+            .and("contain", stories.hits[0].author)
+            .and("contain", stories.hits[0].num_comments)
+            .and("contain", stories.hits[0].points);
+          cy.get(`.item a:contains(${stories.hits[0].title})`).should("have.attr","href",stories.hits[0].url);
+
+          cy.get(".item")
             .last()
-            .should('contain', stories.hits[1].title)
-            .and('contain', stories.hits[1].author)
-            .and('contain', stories.hits[1].num_comments)
-            .and('contain', stories.hits[1].points)
-            cy.get(`.item a:contains(${stories.hits[1].title})`)
-            .should('have.attr', 'href', stories.hits[1].url)
+            .should("contain", stories.hits[1].title)
+            .and("contain", stories.hits[1].author)
+            .and("contain", stories.hits[1].num_comments)
+            .and("contain", stories.hits[1].points);
+          cy.get(`.item a:contains(${stories.hits[1].title})`).should(
+            "have.attr",
+            "href",
+            stories.hits[1].url
+          );
         });
 
         it("shows only nineteen story after dimissing the first one", () => {
@@ -104,8 +104,27 @@ describe("Hacker Stories", () => {
         // and so, how can I test ordering?
         // This is why these tests are being skipped.
         // TODO: Find a way to test them out.
-        context.skip("Order by", () => {
-          it("orders by title", () => {});
+        context("Order by", () => {
+          it.only("orders by title", () => {
+            cy.get('.list-header-button:contains(Title)')
+              .as('titleHeader')
+              .click()
+            cy.get('.item')
+              .first()
+              .should('be.visible')
+              .and('contain', stories.hits[0].title)
+            cy.get(`.item a:contains(${stories.hits[0].title})`)
+              .should("have.attr","href",stories.hits[0].url);
+
+            cy.get('@titleHeader')
+              .click()
+            cy.get('.item')
+              .first()
+              .should('be.visible')
+              .and('contain', stories.hits[1].title)
+            cy.get(`.item a:contains(${stories.hits[1].title})`)
+              .should("have.attr","href",stories.hits[1].url);
+          });
 
           it("orders by author", () => {});
 
