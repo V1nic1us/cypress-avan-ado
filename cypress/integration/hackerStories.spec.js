@@ -135,9 +135,9 @@ describe("Hacker Stories", () => {
             );
           });
 
-          it("orders by author", () => {
+          it.only("orders by author", () => {
             cy.get(".list-header-button:contains(Author)").as("authorHeader");
-            // .click();
+            cy.get("@authorHeader").click();
             cy.get(".item")
               .first()
               .should("be.visible")
