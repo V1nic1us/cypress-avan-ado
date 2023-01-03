@@ -108,7 +108,7 @@ describe("Hacker Stories", () => {
         // and so, how can I test ordering?
         // This is why these tests are being skipped.
         // TODO: Find a way to test them out.
-        context.only("Order by", () => {
+        context("Order by", () => {
           it("orders by title", () => {
             cy.get(".list-header-button:contains(Title)")
               .as("titleHeader")
@@ -136,8 +136,7 @@ describe("Hacker Stories", () => {
           });
 
           it("orders by author", () => {
-            cy.get(".list-header-button:contains(Author)")
-            .as("authorHeader");
+            cy.get(".list-header-button:contains(Author)").as("authorHeader");
             // .click();
             cy.get(".item")
               .first()
@@ -200,6 +199,10 @@ describe("Hacker Stories", () => {
         cy.wait("@getEmptyStories");
 
         cy.get("#search").clear();
+      });
+
+      it("shows no story when none is returned", () => {
+        cy.get(".item").should("not.exist");
       });
 
       it("types and hits ENTER", () => {
