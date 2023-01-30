@@ -261,9 +261,9 @@ describe("Hacker Stories", () => {
           );
 
           Cypress._.times(6, () => {
-            const randomWord= fake.random.word();
+            const randomWord= faker.random.word();
 
-            cy.get("#search").clear().type(`${faker.random.word()}{enter}`);
+            cy.get("#search").clear().type(`${randomWord}{enter}`);
             cy.wait("@getRandomStories");
             cy.getLocalStorage('search')
               .should('be.equal', randomWord)
