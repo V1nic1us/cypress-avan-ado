@@ -298,7 +298,7 @@ context("Errors", () => {
   });
 });
 
-it.only('shows a "Loading ..." stage before showing the results', () => {
+it('shows a "Loading ..." stage before showing the results', () => {
   cy.intercept(
     "GET", 
     "**search**", 
