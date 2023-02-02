@@ -42,15 +42,13 @@ describe("Hacker Stories", () => {
 
       cy.wait("@getNewTermStories");
 
-      cy.getLocalStorage('search')
-        .should('be.equal', newTerm)
+      cy.getLocalStorage("search").should("be.equal", newTerm);
 
       cy.get(`button:contains(${initialTerm})`).should("be.visible").click();
 
       cy.wait("@getStories");
 
-      cy.getLocalStorage('search')
-      .should('be.equal', initialTerm)
+      cy.getLocalStorage("search").should("be.equal", initialTerm);
 
       cy.get(".item").should("have.length", 20);
       cy.get(".container")
@@ -179,7 +177,9 @@ describe("Hacker Stories", () => {
           });
 
           it("orders by points", () => {
-            cy.get(".list-header-button:contains(Points)").should("be.visible").as("pointsHeader");
+            cy.get(".list-header-button:contains(Points)")
+              .should("be.visible")
+              .as("pointsHeader");
             // .click()
 
             cy.get(".item")
@@ -223,8 +223,7 @@ describe("Hacker Stories", () => {
 
         cy.wait("@getStories");
 
-        cy.getLocalStorage('search')
-        .should('be.equal', newTerm)
+        cy.getLocalStorage("search").should("be.equal", newTerm);
 
         cy.get(".item").should("have.length", 2);
         cy.get(`button:contains(${initialTerm})`).should("be.visible");
@@ -236,8 +235,7 @@ describe("Hacker Stories", () => {
 
         cy.wait("@getStories");
 
-        cy.getLocalStorage('search')
-        .should('be.equal', newTerm)
+        cy.getLocalStorage("search").should("be.equal", newTerm);
 
         cy.get(".item").should("have.length", 2);
 
@@ -261,12 +259,11 @@ describe("Hacker Stories", () => {
           );
 
           Cypress._.times(6, () => {
-            const randomWord= faker.random.word();
+            const randomWord = faker.random.word();
 
             cy.get("#search").clear().type(`${randomWord}{enter}`);
             cy.wait("@getRandomStories");
-            cy.getLocalStorage('search')
-              .should('be.equal', randomWord)
+            cy.getLocalStorage("search").should("be.equal", randomWord);
           });
 
           cy.get(".last-searches").within(() => {
@@ -299,4 +296,21 @@ context("Errors", () => {
 
     cy.get("p:contains(Something went wrong ...)");
   });
+});
+
+it.only('shows a "Loading ..." stage before showing the results', () => {
+  cy.intercept(
+    "GET", 
+    "**search**", 
+    {
+      delay: 3000,
+      fixture: "stories",
+    }
+  ).as("getDelayedStories");
+
+  cy.visit("/");
+
+  cy.assertLoadingIsShownAndHidden();
+  cy.wait("@getDelayedStories");
+  cy.get(".item").should("have.length", 2);
 });
